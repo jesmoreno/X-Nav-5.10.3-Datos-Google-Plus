@@ -31,7 +31,7 @@
       // The provided key works for this sample only when run from
       // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
       // To use in your own application, replace this API key with your own.
-      var apiKey = 'AIzaSyDrGPoaKIYNXdeyMrDKyNR0llOMfa0NKQU';
+      var apiKey = 'AIzaSyBu3RpbHtQvU9s-JQVwRnCwfuYG--ve6fI';
 
       // Use a button to handle authentication the first time.
       function handleClientLoad() {
@@ -43,27 +43,42 @@
       function makeApiCall() {
         gapi.client.load('plus', 'v1', function() {
           var request = gapi.client.plus.activities.list({
-            'userId': '108086881826934773478',
+            'userId': '103846222472267112072',
             'collection': 'public'
             // For instance:
             // 'userId': '+GregorioRobles'
           });
           request.execute(function(resp) {
-            var heading = document.createElement('h4');
-            var image = document.createElement('img');
-            console.log("Resp:"+resp.items);
-            //console.log("Resp2:"+resp.title);
-            //image.src = resp.image.url;
-            //heading.appendChild(image);
-            //heading.appendChild(document.createTextNode(resp.displayName));
+            
 
-            document.getElementById('content').appendChild(heading);
+            for(var i=0;i<resp.items.length;i++){
+              var title = document.createElement('p');
+              var list = document.createElement('ul');
+              var latitude = document.createElement('li');
+              var longitude = document.createElement('li');
+
+              if(resp.items[i]['title']){
+                title.appendChild(document.createTextNode("Title: "+resp.items[i]['title']));
+              }
+
+              if(resp.items[i]['location'] !== undefined){
+                title.appendChild(list);
+                list.appendChild(latitude);
+                list.appendChild(longitude);
+                latitude.appendChild(document.createTextNode("Latitud: "+resp.items[i]['location']['position'].latitude));
+                longitude.appendChild(document.createTextNode("Longitud: "+resp.items[i]['location']['position'].longitude));
+              }
+
+              
+              document.getElementById('content').appendChild(title);
+            }
+
           });
         });
       }
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <h1>Lista de actividades Google+</h1>
     <div id="content"></div>
-    <p>Retrieves your profile name (and picture) using the Google Plus API.</p>
   </body>
 </html>
